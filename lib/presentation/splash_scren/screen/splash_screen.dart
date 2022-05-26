@@ -1,11 +1,12 @@
+
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:one_health_app/presentation/onboarding/screen/on_boarding_Screen.dart';
+import 'package:one_health_app/presentation/onboarding/screen/on_boarding_screen.dart';
 import 'package:one_health_app/presentation/splash_scren/splash_cubit/splashscreen_cubit.dart';
 import 'package:one_health_app/presentation/user_login/loginpage/login_page.dart';
-import 'package:sizer/sizer.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:sizer/sizer.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class SplashScreen extends StatelessWidget {
                 context,
                 PageTransition(
                     duration: const Duration(milliseconds: 600),
-                    child: const LoginPage(),
+                    child: const OnBoarding(),
                     type: PageTransitionType.fade));
           }
         },

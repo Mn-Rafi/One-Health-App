@@ -27,7 +27,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   context,
                   PageTransition(
                       duration: const Duration(milliseconds: 600),
-                      child: const LoginPage(),
+                      child: LoginPage(),
                       type: PageTransitionType.fade));
             },
             child: const OnBoardingBody(),

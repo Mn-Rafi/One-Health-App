@@ -13,7 +13,27 @@ class LoginpagenavBloc extends Bloc<LoginpagenavEvent, LoginpagenavState> {
       emit(LoginpagenavRegister());
     });
     on<LoginEvent>((event, emit) {
-      emit(LoginpagenavHome());
+      if (event.email != '' && event.email != null) {
+        emit(LoginpagenavHome());
+      } else {
+        emit(LoginErrorState());
+      }
+    });
+
+    on<LoginPagenavResettoLoginEvent>((event, emit) {
+      emit(LoginPagenavResettoLoginState());
+    });
+    on<LoginPageNavtoOTPLoginEvent>((event, emit) {
+      emit(LoginPageNavtoOTPLoginState());
+    });
+    on<LoginPageOtpPopEvent>((event, emit) {
+      emit(LoginPageOtpHomeState());
+    });
+    on<LoginPageOtpnavHomeEvent>((event, emit) {
+      emit(LoginPageOtpnavHomeState());
+    });
+    on<LoginPagePasswordIconChangeEvent>((event, emit) {
+      emit(LoginPagePasswordIconChangeState());
     });
   }
 }

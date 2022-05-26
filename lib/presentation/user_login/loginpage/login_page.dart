@@ -7,12 +7,14 @@ import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot
 import 'package:one_health_app/presentation/user_login/login_nav_bloc/loginpagenav_bloc.dart';
 import 'package:one_health_app/presentation/user_login/loginpage/utilities.dart';
 import 'package:one_health_app/presentation/user_login/registerpage/register_screen.dart';
+import 'package:one_health_app/presentation/user_login/sign_in_with_otp/otplogin_screen.dart';
+import 'package:one_health_app/utilities.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class LoginPage extends StatelessWidget {
                   context,
                   PageTransition(
                       duration: const Duration(milliseconds: 600),
-                      child: const RegisterScreen(),
+                      child: RegisterScreen(),
                       type: PageTransitionType.fade));
             }
             if (state is LoginpagenavHome) {
@@ -44,39 +46,50 @@ class LoginPage extends StatelessWidget {
                       child: const HomePage(),
                       type: PageTransitionType.fade));
             }
+            if (state is LoginPageNavtoOTPLoginState) {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      duration: const Duration(milliseconds: 600),
+                      child: BlocProvider.value(
+                        value: context.read<LoginpagenavBloc>(),
+                        child: const OTPLoginScreen(),
+                      ),
+                      type: PageTransitionType.fade));
+            }
+            if (state is LoginErrorState) {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(snackBar('Email id is required'));
+            }
           },
-          child: const LoginPageWidget()),
+          child: LoginPageWidget()),
     );
   }
 }
 
 class LoginPageWidget extends StatelessWidget {
-  const LoginPageWidget({
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  LoginPageWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var IconData = Icons.visibility_off;
+    bool isObscure = true;
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 14.w,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: Padding(
-          padding: EdgeInsets.only(left: 3.w),
-          child: Image.asset('images/logo.png'),
-        ),
-        title: const Text(
-          'One Health Hospital',
-        ),
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 5.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ksize7,
+              ksize3,
               Center(
                 child: Text(
                   'Hello Guest!\nWelcome to One Health App',
@@ -109,10 +122,11 @@ class LoginPageWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.green[900]!),
                   ),
-                  child: const TextField(
+                  child: TextField(
+                    controller: emailController,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelStyle:
                           TextStyle(color: Color.fromARGB(255, 27, 94, 32)),
                       border: InputBorder.none,
@@ -121,26 +135,45 @@ class LoginPageWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 3.h,
-              ),
-              SlideInLeft(
-                delay: const Duration(milliseconds: 400),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
-                  decoration: kboxDecoration1,
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.green[900]!),
-                      suffixIcon: GestureDetector(
-                          onTap: () {},
-                          child: const Icon(Icons.visibility_off)),
-                      border: InputBorder.none,
-                      labelText: "Password",
+              ksize3,
+              BlocConsumer<LoginpagenavBloc, LoginpagenavState>(
+                listener: (context, state) {
+                  if (state is LoginPagePasswordIconChangeState) {
+                    if (IconData == Icons.visibility_off) {
+                      isObscure = false;
+                      IconData = Icons.visibility;
+                    } else {
+                      isObscure = true;
+                      IconData = Icons.visibility_off;
+                    }
+                  }
+                },
+                builder: (context, state) {
+                  return SlideInLeft(
+                    delay: const Duration(milliseconds: 400),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
+                      decoration: kboxDecoration1,
+                      child: TextField(
+                        controller: passwordController,
+                        obscureText: isObscure,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(color: Colors.green[900]!),
+                          suffixIcon: GestureDetector(
+                              onTap: () {
+                                print(emailController.text);
+                                context
+                                    .read<LoginpagenavBloc>()
+                                    .add(LoginPagePasswordIconChangeEvent());
+                              },
+                              child: Icon(IconData)),
+                          border: InputBorder.none,
+                          labelText: "Password",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               ksize1,
               SlideInRight(
@@ -160,14 +193,14 @@ class LoginPageWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 3.h,
-              ),
+              ksize3,
               SlideInLeft(
                 delay: const Duration(milliseconds: 400),
                 child: GestureDetector(
                   onTap: () {
-                    context.read<LoginpagenavBloc>().add(LoginEvent());
+                    context.read<LoginpagenavBloc>().add(LoginEvent(
+                        email: emailController.text,
+                        password: passwordController.text));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +227,37 @@ class LoginPageWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              ksize3,
+              ksize1,
+              SlideInRight(
+                delay: const Duration(milliseconds: 400),
+                child: const Center(
+                  child: SimpleText(
+                    text: 'OR',
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              ksize1,
+              SlideInRight(
+                delay: const Duration(milliseconds: 400),
+                child: GestureDetector(
+                  onTap: () {
+                    context
+                        .read<LoginpagenavBloc>()
+                        .add(LoginPageNavtoOTPLoginEvent());
+                  },
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SimpleText(
+                        text: 'Sign In with OTP',
+                        color: Colors.blue[900]!,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ksize1,
               FadeIn(
                 delay: const Duration(milliseconds: 400),
                 child: Row(

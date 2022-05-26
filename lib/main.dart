@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:one_health_app/presentation/splash_scren/screen/splash_screen.dart';
 import 'package:one_health_app/themedata.dart';
 import 'package:sizer/sizer.dart';
@@ -12,16 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return  MaterialApp(
-          theme: MyTheme.lightTheme,
-          themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
-    );
-      }
- );
-   
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark));
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        theme: MyTheme.lightTheme,
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        home: const SplashScreen(),
+      );
+    });
   }
 }

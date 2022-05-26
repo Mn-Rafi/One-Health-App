@@ -3,45 +3,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:one_health_app/presentation/user_login/forgotpasswordpage/enter_otp.dart';
 import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot_password_bloc/forgotpassword_bloc.dart';
+import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot_password_customwidgets.dart';
+import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot_password_screen.dart';
+import 'package:one_health_app/presentation/user_login/forgotpasswordpage/reset_password.dart';
 import 'package:one_health_app/presentation/user_login/loginpage/utilities.dart';
 import 'package:one_health_app/utilities.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pinput/pinput.dart';
 import 'package:sizer/sizer.dart';
 
-class ForgotPassword extends StatelessWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+class EnterOTP extends StatelessWidget {
+  const EnterOTP({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ForgotpasswordBloc(),
-      child: BlocListener<ForgotpasswordBloc, ForgotpasswordState>(
-        listener: (context, state) {
-          if (state is ForgotpasswordPopstate) {
-            Navigator.pop(context);
-          }
-          if (state is ForgotpasswordOtpstate) {
-            Navigator.push(
+    return BlocListener<ForgotpasswordBloc, ForgotpasswordState>(
+      listener: (context, state) {
+        if (state is ForgotpasswordNewPasswordState) {
+          Navigator.push(
                 context,
                 PageTransition(
                     duration: const Duration(milliseconds: 600),
                     child: BlocProvider.value(
                       value: context.read<ForgotpasswordBloc>(),
-                      child: const EnterOTP(),
+                      child: const ResetPassword(),
                     ),
                     type: PageTransitionType.fade));
-          }
-        },
-        child: const ForgotPasswordEmailVerification(),
-      ),
+        }
+        if (state is ForgotpasswordOtpstate) {
+          Navigator.pop(context);
+        }
+      },
+      child: const EnterOTPBody(),
     );
   }
 }
 
-class ForgotPasswordEmailVerification extends StatelessWidget {
-  const ForgotPasswordEmailVerification({
+class EnterOTPBody extends StatelessWidget {
+  const EnterOTPBody({
     Key? key,
   }) : super(key: key);
 
@@ -57,7 +57,7 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
               ksize7,
               Center(
                 child: Text(
-                  'Type your email\nto verify your account',
+                  'Type the Verification Code\nthat we have sent',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.ubuntu(
                       fontSize: 13.sp,
@@ -68,7 +68,7 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
               ksize5,
               const Center(
                 child: SimpleText(
-                  text: 'Help us to find your Account',
+                  text: 'Enter your Verification Code below.',
                 ),
               ),
               ksize3,
@@ -76,23 +76,7 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
               ksize3,
               SlideInLeft(
                 delay: const Duration(milliseconds: 400),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.green[900]!),
-                  ),
-                  child: const TextField(
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelStyle:
-                          TextStyle(color: Color.fromARGB(255, 27, 94, 32)),
-                      border: InputBorder.none,
-                      labelText: "Email",
-                    ),
-                  ),
-                ),
+                child: const OTPField(),
               ),
               ksize3,
               SlideInLeft(
@@ -101,7 +85,7 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
                   onTap: () {
                     context
                         .read<ForgotpasswordBloc>()
-                        .add(ForgotPasswordOTPEvent());
+                        .add(ForgotPasswordNewPasswordEvent());
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +99,7 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Send OTP',
+                            'Verify Now',
                             textAlign: TextAlign.left,
                             style: GoogleFonts.ubuntu(
                               fontSize: 11.sp,
@@ -128,13 +112,21 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
                   ),
                 ),
               ),
+              ksize3,
+              FadeIn(
+                  delay: const Duration(milliseconds: 400),
+                  child: Text(
+                    'RESEND OTP',
+                    style:
+                        GoogleFonts.ubuntu(fontSize: 14.sp, color: Colors.blue),
+                  )),
               SizedBox(
-                height: 25.h,
+                height: 20.h,
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: Container(
                     alignment: Alignment.center,
-                    width: 33.w,
+                    width: 20.w,
                     height: 4.h,
                     decoration:
                         kboxDecoration1.copyWith(color: Colors.green[900]),
@@ -150,7 +142,7 @@ class ForgotPasswordEmailVerification extends StatelessWidget {
                           color: Colors.white,
                         ),
                         label: const Text(
-                          'Back to login',
+                          'Back',
                           style: TextStyle(color: Colors.white),
                         )),
                   ),

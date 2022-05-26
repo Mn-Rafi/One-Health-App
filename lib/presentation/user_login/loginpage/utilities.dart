@@ -5,10 +5,12 @@ import 'package:sizer/sizer.dart';
 class SimpleText extends StatelessWidget {
   final String text;
   final Color color;
+  final double fontSize;
   const SimpleText({
     Key? key,
-    this.color = Colors.black,
     required this.text,
+    this.color = Colors.black,
+    this.fontSize = 11,
   }) : super(key: key);
 
   @override
@@ -17,12 +19,13 @@ class SimpleText extends StatelessWidget {
       text,
       textAlign: TextAlign.left,
       style: GoogleFonts.ubuntu(
-        fontSize: 11.sp,
+        fontSize: fontSize.sp,
         color: color,
       ),
     );
   }
 }
+
 final ksize1 = SizedBox(
   height: 1.h,
 );
@@ -35,8 +38,6 @@ final ksize5 = SizedBox(
   height: 5.h,
 );
 
-
-
 final ksize7 = SizedBox(
   height: 7.h,
 );
@@ -48,3 +49,7 @@ final ksize10 = SizedBox(
 final kboxDecoration1 = BoxDecoration(
     borderRadius: BorderRadius.circular(5),
     border: Border.all(color: Colors.green[900]!));
+
+SnackBar snackBar(String text) => SnackBar(
+      content: Text(text),
+    );
