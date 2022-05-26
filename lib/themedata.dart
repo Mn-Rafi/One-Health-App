@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,11 +20,16 @@ MaterialColor colorCustom = MaterialColor(0xFF90EE90, color);
 
 class MyTheme {
   static ThemeData lightTheme = ThemeData(
+    scaffoldBackgroundColor: Colors.white,
     primarySwatch: colorCustom,
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyText2: TextStyle(color: Colors.black)
     ),
     appBarTheme: AppBarTheme(
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.white
+      ),
       titleTextStyle:  GoogleFonts.ubuntu(fontSize: 15.sp, color: Colors.black, fontWeight: FontWeight.w400),
     )
   );
