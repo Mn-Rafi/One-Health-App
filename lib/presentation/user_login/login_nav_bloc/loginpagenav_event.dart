@@ -20,7 +20,12 @@ class LoginPagenavResettoLoginEvent extends LoginpagenavEvent {}
 
 class LoginPageNavtoOTPLoginEvent extends LoginpagenavEvent {}
 
-class LoginPageOtpPopEvent extends LoginpagenavEvent {}
+class LoginPageOtpPopEvent extends LoginpagenavEvent {
+  final String? number;
+  LoginPageOtpPopEvent({
+    required this.number,
+  });
+}
 
 class LoginPageOtpnavHomeEvent extends LoginpagenavEvent {}
 

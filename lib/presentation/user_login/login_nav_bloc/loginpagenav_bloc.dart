@@ -28,18 +28,13 @@ class LoginpagenavBloc extends Bloc<LoginpagenavEvent, LoginpagenavState> {
           event.password != '' &&
           event.password != null) {
         if (emailValid(event.email!)) {
-          validationCount++;
-        } else {
-          emit(LoginEmailErrorState());
-        }
-        if (passwordValid.hasMatch(event.password!)) {
-          if (validationCount != 0) {
+          if (passwordValid.hasMatch(event.password!)) {
             emit(LoginpagenavHome());
           } else {
-            emit(LoginEmailErrorState());
+            emit(LoginPasswordErrorState());
           }
         } else {
-          emit(LoginPasswordErrorState());
+          emit(LoginEmailErrorState());
         }
       } else {
         emit(LoginErrorState());
@@ -53,7 +48,11 @@ class LoginpagenavBloc extends Bloc<LoginpagenavEvent, LoginpagenavState> {
       emit(LoginPageNavtoOTPLoginState());
     });
     on<LoginPageOtpPopEvent>((event, emit) {
-      emit(LoginPageOtpHomeState());
+      if (event.number!.length == 10) {
+        emit(LoginPageOtpHomeState());
+      } else {
+        emit(LoginPageOtpHomeErrorState());
+      }
     });
     on<LoginPageOtpnavHomeEvent>((event, emit) {
       emit(LoginPageOtpnavHomeState());

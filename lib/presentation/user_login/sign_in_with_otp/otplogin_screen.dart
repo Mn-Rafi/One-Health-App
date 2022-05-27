@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:one_health_app/presentation/user_login/login_nav_bloc/loginpagenav_bloc.dart';
 import 'package:one_health_app/presentation/user_login/loginpage/utilities.dart';
 import 'package:one_health_app/presentation/user_login/sign_in_with_otp/otpverification.dart';
+import 'package:one_health_app/presentation/user_login/sign_in_with_otp/utilities.dart';
 import 'package:one_health_app/utilities.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
@@ -15,14 +16,15 @@ class OTPLoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const OTPScreenPage();
+    return OTPScreenPage();
   }
 }
 
 class OTPScreenPage extends StatelessWidget {
-  const OTPScreenPage({
+  OTPScreenPage({
     Key? key,
   }) : super(key: key);
+  final TextEditingController numberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,11 @@ class OTPScreenPage extends StatelessWidget {
                 ),
                 type: PageTransitionType.fade),
           );
+        }
+        if (state is LoginPageOtpHomeErrorState) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context)
+              .showSnackBar(snackBar('Provide a valid mobile number'));
         }
       },
       child: Scaffold(
@@ -76,10 +83,17 @@ class OTPScreenPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.green[900]!),
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      onSubmitted: (value) {
+                        context.read<LoginpagenavBloc>().add(
+                            LoginPageOtpPopEvent(
+                                number: numberController.text));
+                      },
+                      controller: numberController,
                       textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        prefixText: '+91 ',
                         labelStyle:
                             TextStyle(color: Color.fromARGB(255, 27, 94, 32)),
                         border: InputBorder.none,
@@ -93,32 +107,20 @@ class OTPScreenPage extends StatelessWidget {
                   delay: const Duration(milliseconds: 400),
                   child: GestureDetector(
                     onTap: () {
-                      context
-                          .read<LoginpagenavBloc>()
-                          .add(LoginPageOtpPopEvent());
+                      context.read<LoginpagenavBloc>().add(
+                          LoginPageOtpPopEvent(number: numberController.text));
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 70.w,
-                          height: 5.h,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
-                          decoration: kboxDecoration1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Send OTP',
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.ubuntu(
-                                fontSize: 11.sp,
-                                color: Colors.green[900],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: BlocBuilder<LoginpagenavBloc, LoginpagenavState>(
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            state is LoginPageOtpHomeErrorState
+                                ? OtpNotloggedInbutton()
+                                : OtpLoggedInbutton()
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),

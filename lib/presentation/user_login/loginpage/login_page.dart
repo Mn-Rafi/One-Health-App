@@ -51,6 +51,8 @@ class LoginPage extends StatelessWidget {
                         child: const OTPLoginScreen(),
                       ),
                       type: PageTransitionType.fade));
+                      context.read<LoginpagenavBloc>().add(
+                          LoginPageOtpPopEvent(number: ''));
             }
             if (state is LoginErrorState) {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -66,6 +68,14 @@ class LoginPage extends StatelessWidget {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context)
                   .showSnackBar(snackBar('Password is not valid'));
+            }
+            if (state is LoginSuccessState) {
+              Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      duration: const Duration(milliseconds: 600),
+                      child: const HomePage(),
+                      type: PageTransitionType.fade));
             }
           },
           child: LoginPageWidget()),
@@ -128,11 +138,6 @@ class LoginPageWidget extends StatelessWidget {
                     border: Border.all(color: Colors.green[900]!),
                   ),
                   child: TextField(
-                    onSubmitted: (value) {
-                      context.read<LoginpagenavBloc>().add(LoginEvent(
-                          email: emailController.text,
-                          password: passwordController.text));
-                    },
                     controller: emailController,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
@@ -179,6 +184,9 @@ class LoginPageWidget extends StatelessWidget {
                                 context
                                     .read<LoginpagenavBloc>()
                                     .add(LoginPagePasswordIconChangeEvent());
+                                context.read<LoginpagenavBloc>().add(LoginEvent(
+                                    email: emailController.text,
+                                    password: passwordController.text));
                               },
                               child: Icon(iconData)),
                           border: InputBorder.none,
@@ -221,9 +229,9 @@ class LoginPageWidget extends StatelessWidget {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          state is LoginSuccessState ? 
-                          LoggedInbutton() : 
-                          NotloggedInbutton(),
+                          state is LoginSuccessState
+                              ? LoggedInbutton()
+                              : NotloggedInbutton(),
                         ],
                       );
                     },
@@ -281,63 +289,6 @@ class LoginPageWidget extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NotloggedInbutton extends StatelessWidget {
-  const NotloggedInbutton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 70.w,
-      height: 5.h,
-      alignment: Alignment.center,
-      padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
-      decoration: kboxDecoration1,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          'Sign In',
-          textAlign: TextAlign.left,
-          style: GoogleFonts.ubuntu(
-            fontSize: 11.sp,
-            color: Colors.green[900],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LoggedInbutton extends StatelessWidget {
-  const LoggedInbutton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 1000),
-      width: 70.w,
-      height: 5.h,
-      alignment: Alignment.center,
-      padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
-      decoration: kboxDecoration2,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          'Sign Up',
-          textAlign: TextAlign.left,
-          style: GoogleFonts.ubuntu(
-            fontSize: 11.sp,
-            color: Colors.white,
           ),
         ),
       ),
