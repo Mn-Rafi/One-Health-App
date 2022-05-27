@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:one_health_app/presentation/user_login/login_nav_bloc/loginpagenav_bloc.dart';
+import 'package:one_health_app/logic/login_nav_bloc/loginpagenav_bloc.dart';
 import 'package:one_health_app/presentation/user_login/loginpage/utilities.dart';
 import 'package:one_health_app/presentation/user_login/sign_in_with_otp/otpverification.dart';
 import 'package:one_health_app/presentation/user_login/sign_in_with_otp/utilities.dart';

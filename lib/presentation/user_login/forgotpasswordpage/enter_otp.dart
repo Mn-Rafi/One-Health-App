@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot_password_bloc/forgotpassword_bloc.dart';
+import 'package:one_health_app/logic/forgot_password_bloc/forgotpassword_bloc.dart';
 import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot_password_customwidgets.dart';
-import 'package:one_health_app/presentation/user_login/forgotpasswordpage/forgot_password_screen.dart';
 import 'package:one_health_app/presentation/user_login/forgotpasswordpage/reset_password.dart';
 import 'package:one_health_app/presentation/user_login/loginpage/utilities.dart';
 import 'package:one_health_app/utilities.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:pinput/pinput.dart';
 import 'package:sizer/sizer.dart';
 
 class EnterOTP extends StatelessWidget {
