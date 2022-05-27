@@ -50,6 +50,14 @@ final kboxDecoration1 = BoxDecoration(
     borderRadius: BorderRadius.circular(5),
     border: Border.all(color: Colors.green[900]!));
 
+
+
+final kboxDecoration2 = BoxDecoration(
+    borderRadius: BorderRadius.circular(5),
+    color: Colors.green[900]!,
+    border: Border.all(color: Colors.white));
+
 SnackBar snackBar(String text) => SnackBar(
       content: Text(text),
+      duration: const Duration(milliseconds: 600),
     );

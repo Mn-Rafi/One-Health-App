@@ -22,3 +22,10 @@ class LoginPageOtpnavHomeState extends LoginpagenavState{}
 class LoginPagePasswordIconChangeState extends LoginpagenavState{}
 
 class LoginErrorState extends LoginpagenavState{}
+
+class LoginEmailErrorState extends LoginpagenavState{}
+
+class LoginPasswordErrorState extends LoginpagenavState{}
+
+
+class LoginSuccessState extends LoginpagenavState{}

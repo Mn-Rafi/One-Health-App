@@ -85,6 +85,7 @@ class RegisterScreen extends StatelessWidget {
                     return SizedBox(
                       height: 30.h,
                       child: PageView(
+                        physics: const NeverScrollableScrollPhysics(),
                         onPageChanged: (page) {
                           previousPage = page;
                           context
@@ -92,9 +93,9 @@ class RegisterScreen extends StatelessWidget {
                               .pageChangeStart();
                         },
                         controller: controller,
-                        children: const [
-                          PageViewFirst(),
-                          PageViewSecond(),
+                        children: [
+                          PageViewFirst(ctxt: context),
+                          const PageViewSecond(),
                         ],
                       ),
                     );

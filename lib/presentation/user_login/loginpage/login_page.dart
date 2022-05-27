@@ -14,7 +14,7 @@ import 'package:sizer/sizer.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +39,7 @@ class LoginPage extends StatelessWidget {
                       type: PageTransitionType.fade));
             }
             if (state is LoginpagenavHome) {
-              Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      duration: const Duration(milliseconds: 600),
-                      child: const HomePage(),
-                      type: PageTransitionType.fade));
+              context.read<LoginpagenavBloc>().add(LoginSuccessEvent());
             }
             if (state is LoginPageNavtoOTPLoginState) {
               Navigator.push(
@@ -59,8 +54,18 @@ class LoginPage extends StatelessWidget {
             }
             if (state is LoginErrorState) {
               ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBar('Email and password field is required'));
+            }
+            if (state is LoginEmailErrorState) {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context)
-                  .showSnackBar(snackBar('Email id is required'));
+                  .showSnackBar(snackBar('Email is not valid'));
+            }
+            if (state is LoginPasswordErrorState) {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(snackBar('Password is not valid'));
             }
           },
           child: LoginPageWidget()),
@@ -78,7 +83,7 @@ class LoginPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var IconData = Icons.visibility_off;
+    var iconData = Icons.visibility_off;
     bool isObscure = true;
     return Scaffold(
       appBar: appBar,
@@ -123,6 +128,11 @@ class LoginPageWidget extends StatelessWidget {
                     border: Border.all(color: Colors.green[900]!),
                   ),
                   child: TextField(
+                    onSubmitted: (value) {
+                      context.read<LoginpagenavBloc>().add(LoginEvent(
+                          email: emailController.text,
+                          password: passwordController.text));
+                    },
                     controller: emailController,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
@@ -139,12 +149,12 @@ class LoginPageWidget extends StatelessWidget {
               BlocConsumer<LoginpagenavBloc, LoginpagenavState>(
                 listener: (context, state) {
                   if (state is LoginPagePasswordIconChangeState) {
-                    if (IconData == Icons.visibility_off) {
+                    if (iconData == Icons.visibility_off) {
                       isObscure = false;
-                      IconData = Icons.visibility;
+                      iconData = Icons.visibility;
                     } else {
                       isObscure = true;
-                      IconData = Icons.visibility_off;
+                      iconData = Icons.visibility_off;
                     }
                   }
                 },
@@ -155,18 +165,22 @@ class LoginPageWidget extends StatelessWidget {
                       padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
                       decoration: kboxDecoration1,
                       child: TextField(
+                        onSubmitted: (value) {
+                          context.read<LoginpagenavBloc>().add(LoginEvent(
+                              email: emailController.text,
+                              password: passwordController.text));
+                        },
                         controller: passwordController,
                         obscureText: isObscure,
                         decoration: InputDecoration(
                           labelStyle: TextStyle(color: Colors.green[900]!),
                           suffixIcon: GestureDetector(
                               onTap: () {
-                                print(emailController.text);
                                 context
                                     .read<LoginpagenavBloc>()
                                     .add(LoginPagePasswordIconChangeEvent());
                               },
-                              child: Icon(IconData)),
+                              child: Icon(iconData)),
                           border: InputBorder.none,
                           labelText: "Password",
                         ),
@@ -202,28 +216,17 @@ class LoginPageWidget extends StatelessWidget {
                         email: emailController.text,
                         password: passwordController.text));
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 70.w,
-                        height: 5.h,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
-                        decoration: kboxDecoration1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Sign In',
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.ubuntu(
-                              fontSize: 11.sp,
-                              color: Colors.green[900],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: BlocBuilder<LoginpagenavBloc, LoginpagenavState>(
+                    builder: (context, state) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          state is LoginSuccessState ? 
+                          LoggedInbutton() : 
+                          NotloggedInbutton(),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -278,6 +281,63 @@ class LoginPageWidget extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NotloggedInbutton extends StatelessWidget {
+  const NotloggedInbutton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 70.w,
+      height: 5.h,
+      alignment: Alignment.center,
+      padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
+      decoration: kboxDecoration1,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'Sign In',
+          textAlign: TextAlign.left,
+          style: GoogleFonts.ubuntu(
+            fontSize: 11.sp,
+            color: Colors.green[900],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoggedInbutton extends StatelessWidget {
+  const LoggedInbutton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      width: 70.w,
+      height: 5.h,
+      alignment: Alignment.center,
+      padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
+      decoration: kboxDecoration2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'Sign Up',
+          textAlign: TextAlign.left,
+          style: GoogleFonts.ubuntu(
+            fontSize: 11.sp,
+            color: Colors.white,
           ),
         ),
       ),

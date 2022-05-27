@@ -5,10 +5,15 @@ part 'registerpageview_state.dart';
 
 class RegisterpageviewCubit extends Cubit<RegisterpageviewState> {
   RegisterpageviewCubit() : super(RegisterpageviewInitial());
-  void pageChangeStart(){
+  void pageChangeStart() {
     emit(RegisterpageviewStart());
   }
-  void pageChangeEnd(){
+
+  void pageChangeEnd() {
     emit(RegisterpageviewEnd());
+  }
+
+  void dropDownValue() {
+    emit(RegisterpageDropdown());
   }
 }
