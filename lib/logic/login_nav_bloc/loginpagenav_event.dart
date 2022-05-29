@@ -32,3 +32,5 @@ class LoginPageOtpnavHomeEvent extends LoginpagenavEvent {}
 class LoginPagePasswordIconChangeEvent extends LoginpagenavEvent {}
 
 class LoginSuccessEvent extends LoginpagenavEvent{}
+
+class LogingLoadingEvent extends LoginpagenavEvent{}

@@ -63,5 +63,6 @@ class LoginpagenavBloc extends Bloc<LoginpagenavEvent, LoginpagenavState> {
     on<LoginSuccessEvent>((event, emit) {
       emit(LoginSuccessState());
     });
+    on<LogingLoadingEvent>((event, emit) => {emit(LogingLoadingState())});
   }
 }

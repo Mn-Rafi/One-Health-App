@@ -31,3 +31,4 @@ class LoginPasswordErrorState extends LoginpagenavState{}
 
 
 class LoginSuccessState extends LoginpagenavState{}
+class LogingLoadingState extends LoginpagenavState{}

@@ -50,8 +50,6 @@ final kboxDecoration1 = BoxDecoration(
     borderRadius: BorderRadius.circular(5),
     border: Border.all(color: Colors.green[900]!));
 
-
-
 final kboxDecoration2 = BoxDecoration(
     borderRadius: BorderRadius.circular(5),
     color: Colors.green[900]!,
@@ -59,10 +57,8 @@ final kboxDecoration2 = BoxDecoration(
 
 SnackBar snackBar(String text) => SnackBar(
       content: Text(text),
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 2000),
     );
-
-
 
 class NotloggedInbutton extends StatelessWidget {
   const NotloggedInbutton({
@@ -115,6 +111,30 @@ class LoggedInbutton extends StatelessWidget {
             fontSize: 11.sp,
             color: Colors.white,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoggingInInbutton extends StatelessWidget {
+  const LoggingInInbutton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      width: 70.w,
+      height: 5.h,
+      alignment: Alignment.center,
+      padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
+      decoration: kboxDecoration2,
+      child: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: CircularProgressIndicator(
+          color: Colors.white,
         ),
       ),
     );

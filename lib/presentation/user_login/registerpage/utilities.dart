@@ -26,6 +26,11 @@ class PageViewFirst extends StatelessWidget {
     required this.ctxt,
   }) : super(key: key);
 
+  static TextEditingController firstNameController = TextEditingController();
+  static TextEditingController lastNameController = TextEditingController();
+  static TextEditingController ageController = TextEditingController();
+  static TextEditingController bloodgroupController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,7 +43,8 @@ class PageViewFirst extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               border: Border.all(color: Colors.green[900]!),
             ),
-            child: const TextField(
+            child: TextField(
+              controller: firstNameController,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 labelStyle: TextStyle(color: Color.fromARGB(255, 27, 94, 32)),
@@ -55,6 +61,7 @@ class PageViewFirst extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
             decoration: kboxDecoration1,
             child: TextField(
+              controller: lastNameController,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 labelStyle: TextStyle(color: Colors.green[900]!),
@@ -74,6 +81,7 @@ class PageViewFirst extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
                 decoration: kboxDecoration1,
                 child: TextField(
+                  controller: ageController,
                   enableInteractiveSelection: false,
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
@@ -143,6 +151,9 @@ class PageViewSecond extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static TextEditingController emailController = TextEditingController();
+  static TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -155,7 +166,8 @@ class PageViewSecond extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               border: Border.all(color: Colors.green[900]!),
             ),
-            child: const TextField(
+            child: TextField(
+              controller: emailController,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -193,6 +205,7 @@ class PageViewSecond extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(1.h, 0.1.h, 1.h, 0.1.h),
                 decoration: kboxDecoration1,
                 child: TextField(
+                  controller: passwordController,
                   obscureText: true,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
